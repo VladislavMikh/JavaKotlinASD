@@ -144,16 +144,58 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         throw new UnsupportedOperationException();
     }
 
+    private void headSet(SortedSet<T> head, Node<T> node, T toElement) {
+        if (node.value.compareTo(toElement) < 0) {
+            head.add(node.value);
+            if (node.right != null) {
+                headSet(head, node.right, toElement);
+            }
+        }
+        if (node.left != null) {
+            headSet(head, node.left, toElement);
+        }
+    }
+
     @NotNull
     @Override
     public SortedSet<T> headSet(T toElement) {
-        throw new UnsupportedOperationException();
+        if (root == null){
+            throw new IllegalArgumentException();
+        }
+        else {
+            SortedSet<T> head = new BinaryTree<>();
+            headSet(head, root, toElement);
+            if (head.isEmpty()) {
+                throw new IllegalArgumentException();
+            }
+            return head;
+        }
+    }
+
+    private void tailSet(SortedSet<T> tail, Node<T> node, T fromElement) {
+        if (node.value.compareTo(fromElement) >= 0) {
+            tail.add(node.value);
+            if (node.left != null) {
+                tailSet(tail, node.left, fromElement);
+            }
+        }
+        if (node.right != null) {
+            tailSet(tail, node.right, fromElement);
+        }
     }
 
     @NotNull
     @Override
     public SortedSet<T> tailSet(T fromElement) {
-        throw new UnsupportedOperationException();
+        if (root == null) {
+            throw new IllegalArgumentException();
+        } else {
+            SortedSet<T> tail = new BinaryTree<>();
+            tailSet(tail, root, fromElement);
+            if (tail.isEmpty()) {
+                throw new IllegalArgumentException();
+            } else return tail;
+        }
     }
 
     @Override
